@@ -1,0 +1,6 @@
+.env
+[Bb]in
+[Ii]nclude
+[Ll]ib
+pyvenv.cfg
+pip-selfcheck.json
