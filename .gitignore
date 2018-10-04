@@ -4,3 +4,4 @@
 [Ll]ib
 pyvenv.cfg
 pip-selfcheck.json
+__pycache__
