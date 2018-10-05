@@ -4,7 +4,8 @@ import time
 import requests
 import json
 import sys
-
+import face
+import pic
 start_url = '/user/{userId}/start'
 staus_url = '/user/{userId}/status'
 post_url  = '/user/{userId}/post' 
@@ -67,12 +68,13 @@ if __name__ == "__main__":
         
        # Informimg picture status 
         while not take_flag:
-              status = get_face()
-              if status == "OK":
-                  take_flag = True
-              # GET request with params
-              params = { 'status': status } #example: {'statius'; 'right'}
-              status_dic = request_get(status_url, user_id, params)
+            pic_loc = take_pic()  
+            status = get_face(pic_loc)
+            if status == "ok":
+                take_flag = True
+            # GET request with params
+            params = { 'status': status } #example: {'statius'; 'right'}
+            status_dic = request_get(status_url, user_id, params)
 
         # Taking 本番 picture
         if take_flag:

@@ -8,3 +8,7 @@ def take_pic(user_id):
         c.resolution = (1024,768)
         c.capture(pic_loc)
     return pic_loc
+
+
+if __name__ == "__main__":
+    pic_loc = take_pic('user_id')
