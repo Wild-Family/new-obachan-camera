@@ -63,18 +63,19 @@ if __name__ == "__main__":
             user_id = message_dic['user_id']
 
         # Getting display_name,, and Informimg server of taking picture
-        start_dic = request_get(start_url, user_id)
-        display_name = start_dic['display_name']
+        #start_dic = request_get(start_url, user_id)
+        #display_name = start_dic['display_name']
         
        # Informimg picture status 
         while not take_flag:
-            pic_loc = take_pic()  
+            pic_loc = take_pic(user_id)  
             status = get_face(pic_loc)
             if status == "ok":
+                print(status)
                 take_flag = True
             # GET request with params
-            params = { 'status': status } #example: {'statius'; 'right'}
-            status_dic = request_get(status_url, user_id, params)
+            #params = { 'status': status } #example: {'statius'; 'right'}
+            #status_dic = request_get(status_url, user_id, params)
 
         # Taking 本番 picture
         if take_flag:

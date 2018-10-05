@@ -1,3 +1,6 @@
+from google.cloud import vision
+from google.cloud.vision import types
+from PIL import Image, ImageDraw
 
 def get_face(input_filename):
     with open(input_filename, 'rb') as image:
