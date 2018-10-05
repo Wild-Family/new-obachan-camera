@@ -6,9 +6,9 @@ def get_face(input_filename):
     with open(input_filename, 'rb') as image:
         faces = detect_face(image)
         if not faces:
-            return "nobody"
+            return {'status': 'nobady', 'dialogue':"Line上で表示させるメッセ"}
         image.seek(0)
-        return highlight_faces(image, faces)
+        return {'status': highlight_faces(image, faces), 'dialogue':"Line上で表示させるメッセ"}
 
 
 def detect_face(face_file, max_results=4):
@@ -47,7 +47,7 @@ def highlight_faces(image, faces):
         return check_face_loc(box,left_eye,right_eye,nose_tip,joyLikelihood)
 
 def check_face_loc_lonely(face_box,left_eye,right_eye,nose_tip,joyLikelihood):
-    global former_status
+    former_status = None
     if (face_box[0][0]-face_box[1][0])*(face_box[1][1]-face_box[2][1]) < 150 * 150 :
         if former_status == "forward":
             
@@ -98,7 +98,7 @@ def check_face_loc_lonely(face_box,left_eye,right_eye,nose_tip,joyLikelihood):
         print("笑顔になって")
         
         return "smile"
-    return "os"
+    return "ok"
 
 def check_face_loc(face_boxes,left_eyes,right_eyes,nose_tips,joyLikelihoods):
     global former_status
@@ -107,38 +107,38 @@ def check_face_loc(face_boxes,left_eyes,right_eyes,nose_tips,joyLikelihoods):
         print(face_box)
         if(face_box[0][0] > 1024):
             if former_status == "center":
-                center_again.play()
+            
                 return "center again"
             former_status = "center"
-            center.play()
+            
             return "center"
         if(face_box[1][0] < 0):
             if former_status == "center":
-                center_again.play()
+            
                 return "center again"
             former_status = "center"
-            center.play()
+            
             return "center"
         if face_box[0][1] > 768:
             if former_status == "forwards":
-                forwards_again.play()
+            
                 return "forwards again"
             former_status = "forwards"
-            forwards.play()
+            
             return "forwards"
         if face_box[3][1] < 0:
             if former_status == "backs":
-                backs_again.play()
+            
                 return "backs again"
             former_status = "backs"
-            backs.play()
+            
             return "backs"
     for joyLikelihood in joyLikelihoods:
         if(joyLikelihood == 1):
             if former_status == "smiles":
-                smiles_again.play()
+            
                 return "smiles again"
             former_status = "smiles"
-            smiles.play()
+            
             return "smiles"
     return "ok"
