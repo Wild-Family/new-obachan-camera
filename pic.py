@@ -1,16 +1,17 @@
-from azure.servicebus import ServiceBusService, Message, Queue
-import settings
+import os
+import time
+import picamera
+import pygame.mixer
+import json
+import argparse
 
-bus_service = ServiceBusService(
-    service_namespace='linebot-test',
-    shared_access_key_name=settings.SHARED_ACCESS_KEY_NAME,
-    shared_access_key_value=settings.SHARED_ACCESS_KEY
-    )
+from google.cloud import vision
+from google.cloud.vision import types
+from PIL import Image, ImageDraw
 
-if __name__ == "__main__":
-    #print(settings.SHARED_ACCESS_KEY)
-    bus_service.create_queue('test')
-    msg = bus_service.receive_queue_message('test', peek_lock=False)
-    print(msg.body)
-    #msg = bus_service.receive_queue_message('taskqueue', peek_lock=False)
-    #print(msg.body)
+
+def get_face():
+    print('表情')
+
+def take_pic():
+    print('本番写真撮影')
