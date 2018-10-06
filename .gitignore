@@ -5,3 +5,5 @@
 pyvenv.cfg
 pip-selfcheck.json
 __pycache__
+venv
+*.json
