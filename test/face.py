@@ -1,6 +1,9 @@
 from google.cloud import vision
 from google.cloud.vision import types
 from PIL import Image, ImageDraw
+import os, sys
+sys.path.append(os.getcwd())
+import settings
 
 def detect_face(face_file, max_results=4):
     client = vision.ImageAnnotatorClient()
@@ -32,5 +35,6 @@ def main(input_filename, output_filename, max_results):
         image.seek(0)
         highlight_faces(image, faces, output_filename)
 
+
 if __name__ == "__main__":
-    main('./test_face.jpg', './test_result_face.jpg', 4)
+    main('./test/test_face.jpg', './test/test_result_face.jpg', 4)
