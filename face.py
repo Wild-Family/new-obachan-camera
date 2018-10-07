@@ -2,13 +2,16 @@ from google.cloud import vision
 from google.cloud.vision import types
 from PIL import Image, ImageDraw
 
+former_status = ""
+
 def get_face(input_filename):
     with open(input_filename, 'rb') as image:
         faces = detect_face(image)
         if not faces:
-            return {'status': 'nobady', 'dialogue':"Line上で表示させるメッセ"}
+            return {'status': 'nobady', 'dialogue':"顔が写っとらへんで！どこに居るんや！！"}
         image.seek(0)
-        return {'status': highlight_faces(image, faces), 'dialogue':"Line上で表示させるメッセ"}
+        face_status = highlight_faces(image, faces)
+        return face_status
 
 
 def detect_face(face_file, max_results=4):
@@ -47,58 +50,45 @@ def highlight_faces(image, faces):
         return check_face_loc(box,left_eye,right_eye,nose_tip,joyLikelihood)
 
 def check_face_loc_lonely(face_box,left_eye,right_eye,nose_tip,joyLikelihood):
-    former_status = None
+    global former_status
+    print(former_status)
     if (face_box[0][0]-face_box[1][0])*(face_box[1][1]-face_box[2][1]) < 150 * 150 :
         if former_status == "forward":
-            
-            return "forward again"
+            return {"status": "forward again", "dialogue": "前やゆうとるやろ！！"}
         former_status = "forward"
         
-        return "forward" #顔はもう少し上に
+        return {"status": "forward", "dialogue": "もうちょい前来てや〜！" } #顔はもう少し上に
     if (face_box[0][0]-face_box[1][0])*(face_box[1][1]-face_box[2][1]) > 600 * 600 :
         if former_status == "back":
-            
-            return "back again"
+            return {"status": "back again", "dialogue": "もうちょい後ろやゆうとるやろが！！！"}
         former_status = "back"
-        
-        return "back" #顔はもう少し下に
+        return {"status": "back", "dialogue": "もうちょい後ろ下がってや〜！"} #顔はもう少し下に
     if(face_box[0][0] > 1024*1/2) :
         if former_status == "right":
-            
-            return "right again"
+            return {"status": "right again", "dialogue": "もうちょい右やて！！！"}
         former_status = "right"
-        
-        return "right" #被写体は右に
+        return {"status": "right", "dialogue": "もうちょい右行ってくれや〜"} #被写体は右に
     if(face_box[1][0] < 1024*1/2) :
         if former_status == "left":
-            
-            return "left again"
+            return {"status": "left again", "dialogue": "もうちょい左やて！！！"}
         former_status = "left"
-        
-        return "left" #被写体は左に
+        return {"status": "left", "dialogue": "もうちょい左行ってくれや〜"} #被写体は左に
     if face_box[0][1] > 768*1/2 :
         if former_status == "forward":
-        
-            return "forward again"
+            return {"status": "forward again", "dialogue": "前やゆうとるやろ！！"}
         former_status = "forward"
-        
-        return "forward" #顔はもう少し上に
+        return {"status": "forward", "dialogue": "もうちょい前来てや〜！" } #顔はもう少し上に
     if face_box[3][1] < 768*1/2 :
         if former_status == "back":
-        
-            return "back again"
+            return {"status": "back again", "dialogue": "もうちょい後ろやゆうとるやろが！！！"}
         former_status = "back"
-        
-        return "back" #顔はもう少し下に
+        return {"status": "back", "dialogue": "もうちょい後ろ下がってや〜！"} #顔はもう少し下に
     if(joyLikelihood == 1) :
         if former_status == "smile":
-        
-            return "smile again"
+            return {"status": "smile again", "dialogue": "もっとええ顔しろや！笑えや！！！！"}
         former_status = "smile"
-        print("笑顔になって")
-        
-        return "smile"
-    return "ok"
+        return {"status": "smile", "dialogue": "もうちょい笑ってや〜！"} #顔はもう少し下に
+    return {"status": "ok", "dialogue": "よっしゃ！撮ったるで！！"}
 
 def check_face_loc(face_boxes,left_eyes,right_eyes,nose_tips,joyLikelihoods):
     global former_status
@@ -108,37 +98,34 @@ def check_face_loc(face_boxes,left_eyes,right_eyes,nose_tips,joyLikelihoods):
         if(face_box[0][0] > 1024):
             if former_status == "center":
             
-                return "center again"
+                return {"status": "center again", "dialogue": "お前らもっと真ん中よれや！"}
             former_status = "center"
             
-            return "center"
+            return {"status": "center", "dialogue": "みんな離れすぎや！もうちょい真ん中寄ってや〜"}
         if(face_box[1][0] < 0):
             if former_status == "center":
             
-                return "center again"
+                return {"status": "center again", "dialogue": "お前らもっと真ん中よれや！"}
             former_status = "center"
             
-            return "center"
+            return {"status": "center", "dialogue": "みんな離れすぎや！もうちょい真ん中寄ってや〜"}
         if face_box[0][1] > 768:
             if former_status == "forwards":
             
-                return "forwards again"
+                return {"status": "forward again", "dialogue": "お前ら前やゆうとるやろ！！"}
             former_status = "forwards"
             
-            return "forwards"
+            return {"status": "forward", "dialogue": "みんなもうちょい前来てや〜！" }
         if face_box[3][1] < 0:
             if former_status == "backs":
-            
-                return "backs again"
+                return {"status": "backs again", "dialogue": "お前ら後ろやゆうとるやろ！！"}
             former_status = "backs"
             
-            return "backs"
+            return {"status": "backs", "dialogue": "みんなもうちょい後ろ行ってや〜！" }
     for joyLikelihood in joyLikelihoods:
         if(joyLikelihood == 1):
             if former_status == "smiles":
-            
-                return "smiles again"
+                return {"status": "smiles again", "dialogue": "なんやその顔！お前ら笑えやゆうとるやろ！"}
             former_status = "smiles"
-            
-            return "smiles"
-    return "ok"
+            return {"status": "smiles", "dialogue": "みんなもうちょい笑ってや〜!" }
+    return {"status": "ok", "dialogue": "OKや！撮ったるで〜！！"}

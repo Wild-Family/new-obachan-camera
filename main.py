@@ -6,9 +6,9 @@ import json
 import sys
 import face
 import pic
-start_url = '/user/{userId}/start'
-staus_url = '/user/{userId}/status'
-post_url  = '/user/{userId}/post' 
+start_url = 'https://new-obachan-bot.herokuapp.com/user/{userId}/start'
+status_url = 'https://new-obachan-bot.herokuapp.com/user/{userId}/status'
+post_url  = 'https://new-obachan-bot.herokuapp.com/user/{userId}/post' 
 
 
 bus_service = ServiceBusService(
@@ -21,29 +21,36 @@ bus_service.create_queue('test')
 
 def get_message():
     msg = bus_service.receive_queue_message('test', peek_lock=True)
-    if msg is not None:
+    if msg is not None and msg.body is not None:
         dic = json.loads(msg.body.decode('utf8'))
-        print(dic)
         return dic
     else:
         print('message queue time out?')
         return None
 
+def pop_message():
+    msg = bus_service.receive_queue_message('test', peek_lock=False)
+    if msg is not None and msg.body is not None:
+        dic = json.loads(msg.body.decode('utf8'))
+        return dic
+    else:
+        print('message queue time out?')
+        return None
 
 def request_get(url, user_id, params=''):
     res = requests.get(url.format(userId=user_id), params=params)
     if res.status_code == 200:
-        dic = json.loads(res.json())
+        dic = res.json()
         return dic
     else:
-        print('[Error]: {0} of status code is not 200 '.format(url))
+        print('[Error]: {0} of status code is not 200({1}). '.format(url.format(userId=user_id), res.status_code))
         sys.exit(1)
     
 def request_post_with_image(url, user_id, pic_loc):
     files = {'pic': open(pic_loc, "rb")}
     res = requests.post(url.format(userId=user_id), files=files)
     if res.status_code == 200:
-        dic = json.loads(res.json())
+        dic = res.json()
         return dic
     else:
         print('[Error]: {0} of status code is not 200 '.format(url))
@@ -65,6 +72,7 @@ if __name__ == "__main__":
 
         # Getting display_name,, and Informimg server of taking picture
         start_dic = request_get(start_url, user_id)
+        print(start_dic)
         display_name = start_dic['display_name']
         
        # Informimg picture status and dialogue
@@ -74,20 +82,18 @@ if __name__ == "__main__":
             print(face_info)
             if face_info['status'] == "ok":
                 take_flag = True
+            else:
+                pic.remove_pic(pic_loc)
             # GET request with params
             status_dic = request_get(status_url, user_id, face_info)
 
         # Taking 本番 picture
         if take_flag:
-            pic_loc = pic.take_pic()
+            pic_loc = pic.take_pic(user_id)
             post_dic = request_post_with_image(post_url, user_id, pic_loc)
             #message = post_dic['message']
-            take_flag = True
+            take_flag = False
+            pop_message()
+            pic.remove_pic(pic_loc)
         
         time.sleep(1)
-        
-        
-        
-        
-    
-    

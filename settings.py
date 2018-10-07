@@ -20,3 +20,4 @@ if SHARED_ACCESS_KEY_NAME is None:
 if SHARED_ACCESS_KEY is None:
     print('Specify SHARED_ACCESS_KEY as environment variable.')
     os.sys.exit(1)
+
