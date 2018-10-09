@@ -2,24 +2,25 @@ from google.cloud import vision
 from google.cloud.vision import types
 from PIL import Image, ImageDraw
 
+import dialogue
+
 former_status = ""
 
 def get_face(input_filename):
     with open(input_filename, 'rb') as image:
         faces = detect_face(image)
         if not faces:
-            return {'status': 'nobady', 'dialogue':"顔が写っとらへんで！どこに居るんや！！"}
+            dialogue.play_audio("nobody")
+            return {'status': 'nobody', 'dialogue': dialogue.get_dialogue("nobody")}
         image.seek(0)
         face_status = highlight_faces(image, faces)
         return face_status
-
 
 def detect_face(face_file, max_results=4):
     client = vision.ImageAnnotatorClient()
     content = face_file.read()
     image = types.Image(content=content)
     return client.face_detection(image=image).face_annotations
-
 
 def highlight_faces(image, faces):
     if len(faces) == 1:
@@ -53,42 +54,34 @@ def check_face_loc_lonely(face_box,left_eye,right_eye,nose_tip,joyLikelihood):
     global former_status
     print(former_status)
     if (face_box[0][0]-face_box[1][0])*(face_box[1][1]-face_box[2][1]) < 150 * 150 :
-        if former_status == "forward":
-            return {"status": "forward again", "dialogue": "前やゆうとるやろ！！"}
-        former_status = "forward"
-        
-        return {"status": "forward", "dialogue": "もうちょい前来てや〜！" } #顔はもう少し上に
+        status = "forward"
+        result = play_audio(status)
+        return result #顔はもう少し上に
     if (face_box[0][0]-face_box[1][0])*(face_box[1][1]-face_box[2][1]) > 600 * 600 :
-        if former_status == "back":
-            return {"status": "back again", "dialogue": "もうちょい後ろやゆうとるやろが！！！"}
-        former_status = "back"
-        return {"status": "back", "dialogue": "もうちょい後ろ下がってや〜！"} #顔はもう少し下に
+        status = "back"
+        result = play_audio(status)
+        return result
     if(face_box[0][0] > 1024*1/2) :
-        if former_status == "right":
-            return {"status": "right again", "dialogue": "もうちょい右やて！！！"}
-        former_status = "right"
-        return {"status": "right", "dialogue": "もうちょい右行ってくれや〜"} #被写体は右に
+        status = "right"
+        result = play_audio(status)
+        return result #被写体は右に
     if(face_box[1][0] < 1024*1/2) :
-        if former_status == "left":
-            return {"status": "left again", "dialogue": "もうちょい左やて！！！"}
-        former_status = "left"
-        return {"status": "left", "dialogue": "もうちょい左行ってくれや〜"} #被写体は左に
+        status = "left"
+        result = play_audio(status)
+        return result #被写体は左に
     if face_box[0][1] > 768*1/2 :
-        if former_status == "forward":
-            return {"status": "forward again", "dialogue": "前やゆうとるやろ！！"}
-        former_status = "forward"
-        return {"status": "forward", "dialogue": "もうちょい前来てや〜！" } #顔はもう少し上に
+        status = "forward"
+        result = play_audio(status)
+        return result #顔はもう少し上に
     if face_box[3][1] < 768*1/2 :
-        if former_status == "back":
-            return {"status": "back again", "dialogue": "もうちょい後ろやゆうとるやろが！！！"}
-        former_status = "back"
-        return {"status": "back", "dialogue": "もうちょい後ろ下がってや〜！"} #顔はもう少し下に
+        status = "back"
+        result = play_audio(status)
+        return result #顔はもう少し下に
     if(joyLikelihood == 1) :
-        if former_status == "smile":
-            return {"status": "smile again", "dialogue": "もっとええ顔しろや！笑えや！！！！"}
-        former_status = "smile"
-        return {"status": "smile", "dialogue": "もうちょい笑ってや〜！"} #顔はもう少し下に
-    return {"status": "ok", "dialogue": "よっしゃ！撮ったるで！！"}
+        status = "smile"
+        result = play_audio(status)
+        return result #顔はもう少し下に
+    return {"status": "ok", "dialogue": dialogue.get_dialogue("ok")}
 
 def check_face_loc(face_boxes,left_eyes,right_eyes,nose_tips,joyLikelihoods):
     global former_status
@@ -96,36 +89,35 @@ def check_face_loc(face_boxes,left_eyes,right_eyes,nose_tips,joyLikelihoods):
     for face_box in face_boxes:
         print(face_box)
         if(face_box[0][0] > 1024):
-            if former_status == "center":
-            
-                return {"status": "center again", "dialogue": "お前らもっと真ん中よれや！"}
-            former_status = "center"
-            
-            return {"status": "center", "dialogue": "みんな離れすぎや！もうちょい真ん中寄ってや〜"}
+            status = "center"
+            result = play_audio(status)
+            return result
         if(face_box[1][0] < 0):
-            if former_status == "center":
-            
-                return {"status": "center again", "dialogue": "お前らもっと真ん中よれや！"}
-            former_status = "center"
-            
-            return {"status": "center", "dialogue": "みんな離れすぎや！もうちょい真ん中寄ってや〜"}
+            status = "center"
+            result = play_audio(status)
+            return result
         if face_box[0][1] > 768:
-            if former_status == "forwards":
-            
-                return {"status": "forward again", "dialogue": "お前ら前やゆうとるやろ！！"}
-            former_status = "forwards"
-            
-            return {"status": "forward", "dialogue": "みんなもうちょい前来てや〜！" }
+            status = "forwards"
+            result = play_audio(status)
+            return result
         if face_box[3][1] < 0:
-            if former_status == "backs":
-                return {"status": "backs again", "dialogue": "お前ら後ろやゆうとるやろ！！"}
-            former_status = "backs"
-            
-            return {"status": "backs", "dialogue": "みんなもうちょい後ろ行ってや〜！" }
+            status = "backs"
+            result = play_audio(status)
+            return result
     for joyLikelihood in joyLikelihoods:
         if(joyLikelihood == 1):
-            if former_status == "smiles":
-                return {"status": "smiles again", "dialogue": "なんやその顔！お前ら笑えやゆうとるやろ！"}
-            former_status = "smiles"
-            return {"status": "smiles", "dialogue": "みんなもうちょい笑ってや〜!" }
-    return {"status": "ok", "dialogue": "OKや！撮ったるで〜！！"}
+            status = "smiles"
+            result = play_audio(status)
+            return result
+    return {"status": "ok", "dialogue": dialogue.get_dialogue("ok")}
+
+def play_audio(status):
+    global former_status
+    if former_status == status:
+        status += " again"
+    else:
+        former_status = status
+    text = dialogue.get_dialogue(status)
+    dialogue.play_audio(status)
+    
+    return {"status": status, "dialogue": text}
