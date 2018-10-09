@@ -3,6 +3,7 @@ import requests
 import settings
 import pygame.mixer
 import os
+import time
 
 
 aitalk_url = "https://webapi.aitalk.jp/webapi/v2/ttsget.php"
@@ -27,6 +28,7 @@ def play_audio(status):
     # wait to finish
     while channel.get_busy():
         pygame.time.delay(100)
+    pygame.time.delay(500)
 
 def call_my_name(display_name):
     text = display_name
@@ -42,6 +44,19 @@ def call_my_name(display_name):
     play_audio("start")
     # remove audio file
     os.remove(file_path)
+
+def count_down():
+    play_audio("count3")
+    pygame.time.delay(500)
+    play_audio("count2")
+    pygame.time.delay(500)
+    play_audio("count1")
+    pygame.time.delay(500)
+    audio = pygame.mixer.Sound(audio_folder + "shut.wav")
+    channel = audio.play()
+    # wait to finish
+    while channel.get_busy():
+        pygame.time.delay(100)
 
 def request_aitalk(dialogue, filename):
     params = {
@@ -75,6 +90,7 @@ def main():
     get_filename("smile again")
     get_audio("start")
     call_my_name("ドナルド・フォントルロイ・ダック")
+    count_down()
     #request_aitalk("オバチャンが撮ったるで！", 'test.mp3')
 
 if __name__ == '__main__':

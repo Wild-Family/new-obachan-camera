@@ -6,10 +6,12 @@ import json
 import sys
 import face
 import pic
+import dialogue
+
+
 start_url = 'https://new-obachan-bot.herokuapp.com/user/{userId}/start'
 status_url = 'https://new-obachan-bot.herokuapp.com/user/{userId}/status'
 post_url  = 'https://new-obachan-bot.herokuapp.com/user/{userId}/post' 
-
 
 bus_service = ServiceBusService(
     service_namespace='linebot-test',
@@ -17,7 +19,6 @@ bus_service = ServiceBusService(
     shared_access_key_value=settings.SHARED_ACCESS_KEY
     )
 bus_service.create_queue('test')
-
 
 def get_message():
     msg = bus_service.receive_queue_message('test', peek_lock=True)
@@ -56,7 +57,6 @@ def request_post_with_image(url, user_id, pic_loc):
         print('[Error]: {0} of status code is not 200 '.format(url))
         sys.exit(1)
 
-
 if __name__ == "__main__":
     user_id = None
     display_name = None
@@ -74,6 +74,8 @@ if __name__ == "__main__":
         start_dic = request_get(start_url, user_id)
         print(start_dic)
         display_name = start_dic['display_name']
+
+        dialogue.call_my_name(display_name)
         
        # Informimg picture status and dialogue
         while not take_flag:
@@ -89,8 +91,10 @@ if __name__ == "__main__":
 
         # Taking 本番 picture
         if take_flag:
+            dialogue.count_down()
             pic_loc = pic.take_pic(user_id)
             post_dic = request_post_with_image(post_url, user_id, pic_loc)
+            dialogue.play_audio("end")
             #message = post_dic['message']
             take_flag = False
             pop_message()

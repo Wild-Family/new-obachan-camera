@@ -24,3 +24,6 @@
 - Azure Service Busのキューをすべて削除(時々できない)
 ### take.py
 - raspiで写真撮影のテスト
+
+## Credit
+- Music is VFR
