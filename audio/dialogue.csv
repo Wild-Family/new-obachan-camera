@@ -1,0 +1,27 @@
+status,dialogue,filename
+forward,もうちょい前や！,forward.wav
+forward again,前言うとるやろ！,forward_again.wav
+back,もうちょい下がってや！,back.wav
+back again,下がれ言うとるやろ！,back_again.wav
+right,もうちょい右や！,right.wav
+right again,右言うとるやろ！,right_again.wav
+left,もうちょい左や！,left.wav
+left again,左言うとるやろ！,left_again.wav
+smile,もうちょい笑ってや！,smile.wav
+smile again,笑顔が足りんで！,smile_again.wav
+center,もっと真ん中に寄ってや！,center.wav
+center again,真ん中に寄れ言うとるやろ！,center_again.wav
+forwards,みんなもっと前や！,forwards.wav
+forwards again,みんなもっと前言うとるやろ！,forwards_again.wav
+backs,みんな下がってや！,backs.wav
+backs again,みんな下がれ言うとるやろ！,backs_again.wav
+smiles,みんな笑ってや！,smiles.wav
+smiles again,みんな笑えや！,smiles_again.wav
+ok,ええ感じや！　撮るで！,ok.wav
+end,楽しんでや～！,end.wav
+nobody,誰もおらんやないかい！,nobody.wav
+start,今から撮るで！,start.wav
+count1,1,count1.wav
+count2,2,count2.wav
+count3,3,count3.wav
+shut,,shut.wav
