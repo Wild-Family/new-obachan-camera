@@ -24,6 +24,8 @@
 - Azure Service Busのキューをすべて削除(時々できない)
 ### take.py
 - raspiで写真撮影のテスト
+### get_all_sound.py
+- AITALKにdialogue.csvにあるすべての音声ファイルをリクエスト
 
 ## Credit
 - Music is VFR
