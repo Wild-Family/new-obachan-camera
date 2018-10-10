@@ -1,4 +1,7 @@
 # new-obachan-camera
+## 注
+- raspberry piではnumpyはapt-getしないとだめらしい
+  - `sudo apt-get install python3-pandas`
 
 ## /
 ### main.py
