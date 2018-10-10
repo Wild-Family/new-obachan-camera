@@ -81,7 +81,8 @@ def check_face_loc_lonely(face_box,left_eye,right_eye,nose_tip,joyLikelihood):
         status = "smile"
         result = play_audio(status)
         return result #顔はもう少し下に
-    return {"status": "ok", "dialogue": dialogue.get_dialogue("ok")}
+    result = play_audio("ok")
+    return result
 
 def check_face_loc(face_boxes,left_eyes,right_eyes,nose_tips,joyLikelihoods):
     global former_status
@@ -109,7 +110,8 @@ def check_face_loc(face_boxes,left_eyes,right_eyes,nose_tips,joyLikelihoods):
             status = "smiles"
             result = play_audio(status)
             return result
-    return {"status": "ok", "dialogue": dialogue.get_dialogue("ok")}
+    result = play_audio("ok")
+    return result
 
 def play_audio(status):
     global former_status
