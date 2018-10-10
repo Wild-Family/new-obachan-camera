@@ -76,7 +76,7 @@ if __name__ == "__main__":
         display_name = start_dic['display_name']
 
         dialogue.call_my_name(display_name)
-        
+
        # Informimg picture status and dialogue
         while not take_flag:
             pic_loc = pic.take_pic(user_id)  
@@ -99,5 +99,5 @@ if __name__ == "__main__":
             take_flag = False
             pop_message()
             pic.remove_pic(pic_loc)
-        
+    
         time.sleep(1)
