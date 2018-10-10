@@ -12,8 +12,5 @@ def take_pic(user_id):
         c.capture(pic_loc)
     return pic_loc
 
-def remove_pic(user_id):
-    save_path = './'
-    pic_name = user_id
-    pic_loc = save_path + pic_name
+def remove_pic(pic_loc):
     res = os.remove(pic_loc)

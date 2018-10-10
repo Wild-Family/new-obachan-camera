@@ -91,11 +91,11 @@ if __name__ == "__main__":
 
         # Taking 本番 picture
         if take_flag:
+            dialogue.ready_to_take()
             dialogue.count_down()
             pic_loc = pic.take_pic(user_id)
             post_dic = request_post_with_image(post_url, user_id, pic_loc)
             dialogue.play_audio("end")
-            #message = post_dic['message']
             take_flag = False
             pop_message()
             pic.remove_pic(pic_loc)

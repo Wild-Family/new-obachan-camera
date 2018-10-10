@@ -45,6 +45,10 @@ def call_my_name(display_name):
     # remove audio file
     os.remove(file_path)
 
+def ready_to_take():
+    play_audio("ok")
+    pygame.time.delay(200)
+
 def count_down():
     play_audio("count3")
     pygame.time.delay(500)

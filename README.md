@@ -27,5 +27,23 @@
 ### get_all_sound.py
 - AITALKにdialogue.csvにあるすべての音声ファイルをリクエスト
 
+## install
+
+Python ライブラリインストール
+```
+pip3 install -r requirements.txt
+sudo apt-get install python3-pandas
+```
+
+USBオーディオ設定
+
+/usr/share/alsa/alsa.confを編集
+```
+-- defaults.ctl.card 0
+-- defaults.pcm.card 0
+++ defaults.ctl.card 1
+++ defaults.pcm.card 1
+```
+編集後、reboot
 ## Credit
 - Music is VFR
