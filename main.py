@@ -84,20 +84,19 @@ if __name__ == "__main__":
             print(face_info)
             if face_info['status'] == "ok":
                 take_flag = True
-            else:
-                pic.remove_pic(pic_loc)
+            pic.remove_pic(pic_loc)
             # GET request with params
             status_dic = request_get(status_url, user_id, face_info)
 
         # Taking 本番 picture
         if take_flag:
-            dialogue.ready_to_take()
             dialogue.count_down()
             pic_loc = pic.take_pic(user_id)
             post_dic = request_post_with_image(post_url, user_id, pic_loc)
+            print(pic_loc)
+            pic.remove_pic(pic_loc)
             dialogue.play_audio("end")
             take_flag = False
             pop_message()
-            pic.remove_pic(pic_loc)
     
         time.sleep(1)
